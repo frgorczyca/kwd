@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/frgorczyca/biuro_detector_website/issues"
   },
-  "homepage": "https://github.com/frgorczyca/biuro_detector_website#readme"
+  "homepage": "https://github.com/frgorczyca/biuro_detector_website#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
