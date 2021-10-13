@@ -1,0 +1,19 @@
+{
+  "name": "detector_api",
+  "version": "1.0.0",
+  "description": "Simple Api to handle beacon responses for BEST AGH office",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frgorczyca/biuro_detector_website.git"
+  },
+  "author": "fgorczyca",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frgorczyca/biuro_detector_website/issues"
+  },
+  "homepage": "https://github.com/frgorczyca/biuro_detector_website#readme"
+}
