@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/frgorczyca/biuro_detector_website#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "onoff": "^6.0.3"
   }
 }
