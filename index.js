@@ -2,41 +2,56 @@ const express = require("express");
 const fs = require("fs");
 const gpio = require("onoff").Gpio;
 
+const config = require('./config.json')
+
 let nc = new gpio(17, 'in', "both", { debounceTimeout: 10});
 let no = new gpio(27, 'in');
 
 let app = express();
 
-const errorValue = "Error";
-const occupiedValue = "Occupied";
-const emptyValue = "Empty";
-
-const statusFilePath = "office_status.txt";
-
 nc.watch(function(err, value) {
     if(err) {
-	fs.writeFileSync(statusFilePath, errorValue)
+	    fs.writeFileSync(config.statusFilePath, config.errorValue)
     } else if (value == 1) {
-	fs.writeFileSync(statusFilePath, occupiedValue)
+	    fs.writeFileSync(config.statusFilePath, config.occupiedValue)
     } else {
-	fs.writeFileSync(statusFilePath, emptyValue)
+	    fs.writeFileSync(config.statusFilePath, config.emptyValue)
     }
 })
 
-app.use(express.json());
+app.set('view engine', 'pug')
+app.use(express.static(__dirname + '/public'));
 
-app.get("/office_status", function (req, res) {
-    fs.readFile(statusFilePath, "utf8", (err, data) => {
+app.get("/occupy", function (_, res) {
+    fs.writeFileSync(config.statusFilePath, JSON.stringify({ "status": config.occupiedValue, "timeStamp": Date.now()}))
+
+    res.send("ok")
+})
+
+app.get("/empty", function (_, res) {
+    fs.writeFileSync(config.statusFilePath, JSON.stringify({ "status": config.emptyValue, "timeStamp": Date.now()}))
+
+    res.send("ok")
+})
+
+app.get("/office_status", function (_, res) {
+    fs.readFile(config.statusFilePath, "utf8", (err, content) => {
         if (err) {
             res.send(err);
         }
-        res.send(data);
+        res.send(JSON.parse(content));
     })
 })
 
-app.get('/', function (req, res) {
-    console.log(nc.readSync(), no.readSync());
-    res.send("Default response");
+app.get('/', function (_, res) {
+    fs.readFile(config.statusFilePath, "utf8", (err, content) => {
+        if (err) {
+            res.send(err);
+        }
+        let data = JSON.parse(content)
+
+        res.render('occupied', { status: data.status, lastChanged: new Date(data.timeStamp).toLocaleString("pl-PL")})
+    })
 })
 
 app.listen(80);

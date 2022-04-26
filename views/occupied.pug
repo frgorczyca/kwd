@@ -1,0 +1,17 @@
+doctype html
+html(lang="en")
+  head
+    style
+      include style.css
+  body
+    div(class="bg-image")
+        div(class="info-text")
+          p
+              case status
+                when "Occupied"
+                  | Ktoś jest w biurze, jej!
+                when "Empty"
+                  | W biurze nikogo nie ma D:
+                when "Error"
+                  | Wygląda na to że coś nie działa, skontaktuj się z IT
+          p Ostatnia zmiana #{lastChanged}

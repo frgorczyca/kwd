@@ -1,0 +1,6 @@
+{
+    "errorValue" : "Error",
+    "occupiedValue" : "Occupied",
+    "emptyValue" : "Empty",
+    "statusFilePath" : "office_status.txt"
+}
