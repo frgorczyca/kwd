@@ -4,12 +4,10 @@ const gpio = require("onoff").Gpio;
 
 const config = require('./config.json')
 
-let nc = new gpio(17, 'in', "both", { debounceTimeout: 10});
-let no = new gpio(27, 'in');
+let normallyClosed = new gpio(22, 'in', "both", { debounceTimeout: 10});
+let normallyOpen = new gpio(27, 'in');
 
-let app = express();
-
-nc.watch(function(err, value) {
+normallyClosed.watch(function(err, value) {
     if(err) {
 	    fs.writeFileSync(config.statusFilePath, config.errorValue)
     } else if (value == 1) {
@@ -19,21 +17,25 @@ nc.watch(function(err, value) {
     }
 })
 
+let app = express();
 app.set('view engine', 'pug')
 app.use(express.static(__dirname + '/public'));
 
+// Manually set the state to be Occupied
 app.get("/occupy", function (_, res) {
     fs.writeFileSync(config.statusFilePath, JSON.stringify({ "status": config.occupiedValue, "timeStamp": Date.now()}))
-
-    res.send("ok")
+        
+    res.sendStatus(200);
 })
 
+// Manually set the state to be Empty
 app.get("/empty", function (_, res) {
     fs.writeFileSync(config.statusFilePath, JSON.stringify({ "status": config.emptyValue, "timeStamp": Date.now()}))
 
-    res.send("ok")
+    res.sendStatus(200);
 })
 
+// Get office status in JSON format
 app.get("/office_status", function (_, res) {
     fs.readFile(config.statusFilePath, "utf8", (err, content) => {
         if (err) {
@@ -50,7 +52,7 @@ app.get('/', function (_, res) {
         }
         let data = JSON.parse(content)
 
-        res.render('occupied', { status: data.status, lastChanged: new Date(data.timeStamp).toLocaleString("pl-PL")})
+        res.render('index', { status: data.status, lastChanged: new Date(data.timeStamp).toLocaleString("pl-PL")})
     })
 })
 
