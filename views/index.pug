@@ -8,10 +8,10 @@ html(lang="en")
         div(class="info-text")
           p
               case status
-                when "Occupied"
+                when config.occupiedValue
                   | Ktoś jest w biurze, jej!
-                when "Empty"
+                when config.emptyValue
                   | W biurze nikogo nie ma :(
-                when "Error"
+                when config.errorValue
                   | Wygląda na to że coś nie działa, skontaktuj się z IT
           p Ostatnia zmiana #{lastChanged}

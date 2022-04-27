@@ -4,10 +4,11 @@ const gpio = require("onoff").Gpio;
 
 const config = require('./config.json')
 
-let normallyClosed = new gpio(22, 'in', "both", { debounceTimeout: 10});
-let normallyOpen = new gpio(27, 'in');
+let normallyOpen = new gpio(27, 'in', "both", { debounceTimeout: 10});
+// Not used currently, can be used for detecting errors
+let normallyClosed = new gpio(22, 'in');
 
-normallyClosed.watch(function(err, value) {
+normallyOpen.watch(function(err, value) {
     if(err) {
 	    fs.writeFileSync(config.statusFilePath, config.errorValue)
     } else if (value == 1) {
@@ -52,7 +53,7 @@ app.get('/', function (_, res) {
         }
         let data = JSON.parse(content)
 
-        res.render('index', { status: data.status, lastChanged: new Date(data.timeStamp).toLocaleString("pl-PL")})
+        res.render('index', { status: data.status, lastChanged: new Date(data.timeStamp).toLocaleString("pl-PL"), config: config})
     })
 })
 
